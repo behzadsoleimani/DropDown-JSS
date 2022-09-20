@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { createUseStyles } from 'react-jss';
+import cx from 'classnames';
 import { RiArrowDownSLine } from 'react-icons/ri'
 import { getRandomEmoji } from "../../helpers";
 import { IItem } from "./types";
@@ -50,6 +51,9 @@ const useStyles = createUseStyles(({
         margin: '0.5rem',
         cursor: 'pointer'
     },
+    disabled: {
+        pointerEvents: 'none'
+    },
     '@media (max-width: 768px)': {
         selectParent: {
             width: '60%',
@@ -71,7 +75,7 @@ const DropDown = () => {
         if (event.key === 'Enter' && inputValue) {
             setItems([...items, {
                 title: inputValue,
-                emoji : getRandomEmoji(),
+                emoji: getRandomEmoji(),
                 id: new Date().getTime()
             }]);
             setInputValue('')
@@ -84,8 +88,13 @@ const DropDown = () => {
             <input className={classes.inputSelect}
                 onChange={(event: React.BaseSyntheticEvent) => setInputValue(event.target.value)}
                 onKeyDown={handleKeyDown} value={inputValue} />
-            <RiArrowDownSLine className={classes.inputIcon}
-                onClick={() => setShowList(!showList)} />
+
+            <RiArrowDownSLine className={cx(classes.inputIcon, {
+                [classes.disabled]: !items.length
+            })}
+                onClick={() => setShowList(!showList)}
+            />
+
 
             <div className={showList ? classes.showList : classes.hiddenList}>
                 {items.map((item: IItem) => (
