@@ -1,5 +1,5 @@
 import React from 'react';
-import { createUseStyles } from 'react-jss'
+import { createUseStyles } from 'react-jss';
 import DropDown from './components/dropdown';
 
 
