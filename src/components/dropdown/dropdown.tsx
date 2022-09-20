@@ -15,8 +15,9 @@ const useStyles = createUseStyles(({
         padding: '0.5rem 0.2rem',
         borderRadius: '1rem',
         width: '100%',
+        boxShadow: '0 0 0 1pt grey',
         border: 'none',
-        outline: '0.1rem solid #ddd',
+        outline: 'none',
         '&:focus': {
             border: '0.1rem solid lightblue',
         }
@@ -33,7 +34,7 @@ const useStyles = createUseStyles(({
         marginTop: '0.2rem',
         border: '1px solid #ddd',
         width: '100%',
-        padding: '0.5rem 0.1rem',
+        padding: '0.5rem',
         borderRadius: '1rem',
         display: 'flex',
         alignItems: 'baseline',
