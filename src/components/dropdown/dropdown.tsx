@@ -12,7 +12,7 @@ const useStyles = createUseStyles(({
         width: '20rem',
     },
     inputSelect: {
-        padding: '0.5rem',
+        padding: '0.5rem 0.2rem',
         borderRadius: '1rem',
         width: '100%',
         boxShadow: '0 0 0 1pt grey',
@@ -47,7 +47,7 @@ const useStyles = createUseStyles(({
         display: 'none'
     },
     item: {
-        margin: '0.1rem',
+        margin: '0.5rem',
         cursor: 'pointer'
     },
     '@media (max-width: 768px)': {
