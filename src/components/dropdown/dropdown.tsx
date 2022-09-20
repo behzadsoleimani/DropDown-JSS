@@ -12,7 +12,7 @@ const useStyles = createUseStyles(({
         width: '20rem',
     },
     inputSelect: {
-        padding: '0.5rem 0.2rem',
+        padding: '0.5rem',
         borderRadius: '1rem',
         width: '100%',
         boxShadow: '0 0 0 1pt grey',
@@ -34,7 +34,7 @@ const useStyles = createUseStyles(({
         marginTop: '0.2rem',
         border: '1px solid #ddd',
         width: '100%',
-        padding: '0.5rem',
+        padding: '0.5rem 0.1rem',
         borderRadius: '1rem',
         display: 'flex',
         alignItems: 'baseline',
@@ -47,7 +47,7 @@ const useStyles = createUseStyles(({
         display: 'none'
     },
     item: {
-        padding: '0 0.2rem',
+        margin: '0.1rem',
         cursor: 'pointer'
     },
     '@media (max-width: 768px)': {
