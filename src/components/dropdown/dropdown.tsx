@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createUseStyles } from 'react-jss';
 import cx from 'classnames';
 import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+import { AiOutlineCheck } from 'react-icons/ai';
 import toast, { Toaster } from 'react-hot-toast';
 import { getRandomEmoji } from "../../helpers";
 import { ICustomizedIcon, IItem } from "./types";
 import { useListItems } from "../../hooks/useListItems";
+import { useOnClickOutside } from "../../hooks/useOnClickOutside";
 
 const useStyles = createUseStyles(({
     selectParent: {
@@ -21,7 +23,7 @@ const useStyles = createUseStyles(({
         border: 'none',
         outline: 'none',
         '&:focus': {
-            border: '0.1rem solid lightblue',
+            border: '0.1rem solid #e2eff4',
         }
     },
     inputIcon: {
@@ -55,22 +57,30 @@ const useStyles = createUseStyles(({
         width: '100%',
         textAlign: 'left',
         padding: '1rem',
+        position: 'relative'
     },
     itemSelected: {
         width: '85%',
         cursor: 'pointer',
         margin: '0.5rem',
         textAlign: 'left',
-        background: 'lightblue',
+        background: '#e2eff4',
         borderRadius: '2rem',
         padding: '1rem',
+        color: '#0ca7e2'
     },
     disabled: {
         pointerEvents: 'none'
     },
+    checkIcon: {
+        position: 'absolute',
+        right: '5%',
+        top: '40%',
+        color: '#0ca7e2'
+    },
     '@media (max-width: 768px)': {
         selectParent: {
-            width: '60%',
+            width: '70%',
         },
     }
 }));
@@ -91,10 +101,12 @@ const CustomizedIcon = ({ className, onClick, type }: ICustomizedIcon) => {
 
 
 const DropDown = () => {
+    const ref = useRef(null);
     const [showList, setShowList] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState<string>('');
     const [hoverItem, setHoverItem] = useState<number>();
-    const { items, addItems, error } = useListItems([])
+    const { items, addItems, error } = useListItems([]);
+    useOnClickOutside(ref, () => setShowList(false));
     const classes = useStyles();
 
 
@@ -133,7 +145,7 @@ const DropDown = () => {
                 <input className={classes.inputSelect}
                     onChange={handleChangeInput}
                     onKeyDown={handleKeyDown} value={inputValue}
-                    placeholder='Type something and then press Enter' />
+                    placeholder='Type and then press Enter' />
 
                 <CustomizedIcon className={cx(classes.inputIcon, {
                     [classes.disabled]: !items || !items.length
@@ -141,11 +153,13 @@ const DropDown = () => {
                     type={showList ? "open" : "close"}
                     onClick={handleClickIcon}
                 />
-                <div className={showList ? classes.showList : classes.hiddenList}>
+                <div className={showList ? classes.showList : classes.hiddenList}
+                    ref={ref}>
                     {items.map((item: IItem) => (
                         <p key={item.id}
                             className={cx(classes.item, { [classes.itemSelected]: hoverItem === item.id })}
-                            onClick={handleClickItem(item.title, item.id)}>{`${item.title}  ${item.emoji}`}</p>
+                            onClick={handleClickItem(item.title, item.id)}>{`${item.title}  ${item.emoji}`}
+                            {hoverItem === item.id && <AiOutlineCheck className={classes.checkIcon} />}</p>
                     ))}
                 </div>
             </div>
