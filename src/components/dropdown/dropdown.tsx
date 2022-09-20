@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createUseStyles } from 'react-jss';
 import cx from 'classnames';
-import { RiArrowDownSLine } from 'react-icons/ri'
+import { RiArrowDownSLine, RiArrowUpSLine } from 'react-icons/ri';
+import toast, { Toaster } from 'react-hot-toast';
 import { getRandomEmoji } from "../../helpers";
-import { IItem } from "./types";
-
+import { ICustomizedIcon, IItem } from "./types";
+import { useListItems } from "../../hooks/useListItems";
 
 const useStyles = createUseStyles(({
     selectParent: {
@@ -42,14 +43,27 @@ const useStyles = createUseStyles(({
         flexDirection: 'column',
         maxHeight: '15rem',
         height: 'auto',
-        overflow: 'auto'
+        overflow: 'auto',
+        overflowX: 'hidden'
     },
     hiddenList: {
         display: 'none'
     },
     item: {
         margin: '0.5rem',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        width: '100%',
+        textAlign: 'left',
+        padding: '1rem',
+    },
+    itemSelected: {
+        width: '85%',
+        cursor: 'pointer',
+        margin: '0.5rem',
+        textAlign: 'left',
+        background: 'lightblue',
+        borderRadius: '2rem',
+        padding: '1rem',
     },
     disabled: {
         pointerEvents: 'none'
@@ -62,48 +76,86 @@ const useStyles = createUseStyles(({
 }));
 
 
+const CustomizedIcon = ({ className, onClick, type }: ICustomizedIcon) => {
+    switch (type) {
+        case 'open':
+
+            return <RiArrowUpSLine className={className} onClick={onClick} />
+
+
+        default:
+            return <RiArrowDownSLine className={className} onClick={onClick} />
+    }
+}
+
+
 
 const DropDown = () => {
     const [showList, setShowList] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState<string>('');
-    const [items, setItems] = useState<IItem[]>([]);
+    const [hoverItem, setHoverItem] = useState<number>();
+    const { items, addItems, error } = useListItems([])
     const classes = useStyles();
-
 
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
         if (event.key === 'Enter' && inputValue) {
-            setItems([...items, {
+            addItems({
                 title: inputValue,
                 emoji: getRandomEmoji(),
                 id: new Date().getTime()
-            }]);
+            });
             setInputValue('')
         }
     }
 
+    const handleClickItem = (title: string, id: number) => () => {
+        setHoverItem(id)
+        setInputValue(title)
+    }
+
+    const handleChangeInput = (event: React.BaseSyntheticEvent) => setInputValue(event.target.value)
+
+    const handleClickIcon = () => setShowList(!showList)
+
+
+    useEffect(() => {
+
+        if (error) {
+            toast.error("Duplicate Item is not allowed")
+        }
+    }, [error])
+
 
     return (
-        <div className={classes.selectParent}>
-            <input className={classes.inputSelect}
-                onChange={(event: React.BaseSyntheticEvent) => setInputValue(event.target.value)}
-                onKeyDown={handleKeyDown} value={inputValue} />
+        <>
+            <div className={classes.selectParent}>
+                <input className={classes.inputSelect}
+                    onChange={handleChangeInput}
+                    onKeyDown={handleKeyDown} value={inputValue}
+                    placeholder='Type something and then press Enter' />
 
-            <RiArrowDownSLine className={cx(classes.inputIcon, {
-                [classes.disabled]: !items.length
-            })}
-                onClick={() => setShowList(!showList)}
-            />
-
-
-            <div className={showList ? classes.showList : classes.hiddenList}>
-                {items.map((item: IItem) => (
-                    <p key={item.id}
-                        className={classes.item}
-                        onClick={() => setInputValue(item.title)}>{`${item.title}  ${item.emoji}`}</p>
-                ))}
+                <CustomizedIcon className={cx(classes.inputIcon, {
+                    [classes.disabled]: !items || !items.length
+                })}
+                    type={showList ? "open" : "close"}
+                    onClick={handleClickIcon}
+                />
+                <div className={showList ? classes.showList : classes.hiddenList}>
+                    {items.map((item: IItem) => (
+                        <p key={item.id}
+                            className={cx(classes.item, { [classes.itemSelected]: hoverItem === item.id })}
+                            onClick={handleClickItem(item.title, item.id)}>{`${item.title}  ${item.emoji}`}</p>
+                    ))}
+                </div>
             </div>
-        </div>
+            <Toaster position="bottom-center"
+                toastOptions={{
+                    duration: 2000
+                }} />
+
+        </>
+
     )
 
 }
