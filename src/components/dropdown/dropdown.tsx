@@ -16,19 +16,20 @@ const useStyles = createUseStyles(({
         width: '20rem',
     },
     inputSelect: {
-        padding: '0.5rem 0.2rem',
+        padding: '0.5rem 0.2rem 0.5rem 1rem',
         borderRadius: '1rem',
         width: '100%',
         boxShadow: '0 0 0 1pt grey',
         border: 'none',
         outline: 'none',
+        fontSize: '1rem',
         '&:focus': {
             border: '0.1rem solid #e2eff4',
         }
     },
     inputIcon: {
         top: '30%',
-        right: '2%',
+        right: '1%',
         position: 'absolute',
         cursor: 'pointer',
     },
@@ -52,21 +53,21 @@ const useStyles = createUseStyles(({
         display: 'none'
     },
     item: {
-        margin: '0.5rem',
+        margin: '0.3rem',
         cursor: 'pointer',
         width: '100%',
         textAlign: 'left',
-        padding: '1rem',
+        padding: '0.5rem',
         position: 'relative'
     },
     itemSelected: {
-        width: '85%',
+        width: '90%',
         cursor: 'pointer',
-        margin: '0.5rem',
+        margin: '0.3rem',
         textAlign: 'left',
         background: '#e2eff4',
         borderRadius: '2rem',
-        padding: '1rem',
+        padding: '0.5rem',
         color: '#0ca7e2'
     },
     disabled: {
@@ -75,10 +76,10 @@ const useStyles = createUseStyles(({
     checkIcon: {
         position: 'absolute',
         right: '5%',
-        top: '40%',
+        top: '35%',
         color: '#0ca7e2'
     },
-    '@media (max-width: 768px)': {
+    '@media (max-width: 767px)': {
         selectParent: {
             width: '70%',
         },
